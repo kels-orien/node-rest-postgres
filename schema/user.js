@@ -12,4 +12,26 @@ export default gql`
     userName: String!
     createdDate: String
   }
+
+  type Mutation {
+    signupUser(
+      firstName: String!
+      lastName: String!
+      email: String!
+      userName: String!
+      password: String!
+    ): Token
+
+    signinUser(email: String!, password: String!): Token
+
+    editProfile(email: String!, bio: String!): User
+
+    setProfileIMG(email: String!, profileImage: String!): User
+
+    changeEmail(currentEmail: String!, newEmail: String!): User
+
+    changePassword(email: String!, password: String!): User
+
+    passwordReset(email: String!): User
+  }
 `;
