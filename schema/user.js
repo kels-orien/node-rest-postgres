@@ -1,6 +1,9 @@
 import { gql } from "apollo-server-express";
 
 export default gql`
+  type Token {
+    token: String!
+  }
   type User {
     id: ID!
     firstName: String!
@@ -12,7 +15,10 @@ export default gql`
     userName: String!
     createdDate: String
   }
-
+  type Query {
+    user(id: ID!): User
+    users: [User]
+  }
   type Mutation {
     signupUser(
       firstName: String!

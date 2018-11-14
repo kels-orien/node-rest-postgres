@@ -1,3 +1,19 @@
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
+const createToken = (user, secret, expiresIn) => {
+  const { firstName, email } = user;
+
+  return jwt.sign(
+    {
+      firstName,
+      email
+    },
+    secret,
+    { expiresIn }
+  );
+};
+
 export default {
   Query: {
     users: async (parent, args, { models }) => await models.User.findAll(),
@@ -13,50 +29,55 @@ export default {
     }
   },
   Mutation: {
-    signupUser: async (root, {firstName, lastName, email, userName, password}, {User}) => {
+    signupUser: async (
+      root,
+      { firstName, lastName, email, userName, password },
+      { User }
+    ) => {
+      const user = await User.findOne({ email, userName });
 
-      const user = await User.findOne({email, userName});
-
-      if(user){
-          throw new Error('User already exits');
+      if (user) {
+        throw new Error("User already exits");
       }
 
       const newUser = await new User({
-          firstName, 
-          lastName,
-          email,
-          userName,
-          password
+        firstName,
+        lastName,
+        email,
+        userName,
+        password
       }).save();
 
-      return {token: createToken(newUser, process.env.JWT_SECRET, "1hr")};
-  },
-  signinUser: async (root, {email, password }, {User}) => {
-    const user = await User.findOne({email});
+      return { token: createToken(newUser, process.env.JWT_SECRET, "1hr") };
+    },
+    signinUser: async (root, { email, password }, { User }) => {
+      const user = await User.findOne({ email });
 
-    if(!user){
-        throw new Error('User Not Found');
+      if (!user) {
+        throw new Error("User Not Found");
+      }
+
+      const isValidPassword = await bcrypt.compare(password, user.password);
+
+      if (!isValidPassword) {
+        throw new Error("inValid password");
+      }
+
+      return { token: createToken(user, process.env.JWT_SECRET, "1hr") };
+    },
+
+    editProfile: async (root, { email, bio }, { User }) => {
+      const user = await User.findOneAndUpdate(
+        { email },
+        { $set: { bio } },
+        { new: true }
+      );
+
+      if (!user) {
+        throw new Error("User Not Found");
+      }
+
+      return user;
     }
-
-    const isValidPassword = await bcrypt.compare(password, user.password);
-
-    if(!isValidPassword){
-        throw new Error('inValid password');
-    }
-
-    return {token: createToken(user, process.env.JWT_SECRET, "1hr")};
-
-},
-
-editProfile: async (root, {email, bio}, {User}) => {
-
-    const user = await User.findOneAndUpdate({email}, {$set: {bio}}, {new: true});
-
-    if(!user){
-        throw new Error('User Not Found');
-    }
-
-    return user;
-},
   }
 };
