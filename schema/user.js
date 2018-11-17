@@ -18,6 +18,7 @@ export default gql`
   type Query {
     user(id: ID!): User
     users: [User]
+    currentUser: User
   }
   type Mutation {
     signupUser(

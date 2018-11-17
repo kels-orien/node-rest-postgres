@@ -1,5 +1,6 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
+import "dotenv/config";
 
 const createToken = (user, secret, expiresIn) => {
   const { firstName, email } = user;
@@ -19,39 +20,32 @@ export default {
     users: async (parent, args, { models }) => await models.User.findAll(),
 
     user: async (parent, { id }, { models }) => await models.User.findById(id),
-
     currentUser: async (parent, args, { models, currentUser }) => {
       if (!currentUser) {
         return null;
       }
 
-      return await models.User.findById(me.id);
+      return await models.User.findById(currentUser.id);
     }
   },
   Mutation: {
     signupUser: async (
-      root,
+      parent,
       { firstName, lastName, email, userName, password },
-      { User }
+      { models, secret }
     ) => {
-      const user = await User.findOne({ email, userName });
-
-      if (user) {
-        throw new Error("User already exits");
-      }
-
-      const newUser = await new User({
+      const newUser = await models.User.create({
         firstName,
         lastName,
         email,
         userName,
         password
-      }).save();
+      });
 
-      return { token: createToken(newUser, process.env.JWT_SECRET, "1hr") };
+      return { token: createToken(newUser, process.env.SECRET, "1hr") };
     },
-    signinUser: async (root, { email, password }, { User }) => {
-      const user = await User.findOne({ email });
+    signinUser: async (root, { email, password }, { models }) => {
+      const user = await models.User.findOne({ email });
 
       if (!user) {
         throw new Error("User Not Found");
@@ -63,7 +57,7 @@ export default {
         throw new Error("inValid password");
       }
 
-      return { token: createToken(user, process.env.JWT_SECRET, "1hr") };
+      return { token: createToken(user, process.env.SECRET, "1hr") };
     },
 
     editProfile: async (root, { email, bio }, { User }) => {
