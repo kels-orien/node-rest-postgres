@@ -3,11 +3,11 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 const createToken = (user, secret, expiresIn) => {
-  const { firstName, email } = user;
+  const { userName, email } = user;
 
   return jwt.sign(
     {
-      firstName,
+      userName,
       email
     },
     secret,
