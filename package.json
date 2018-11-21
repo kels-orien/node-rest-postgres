@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon --exec babel-node index.js"
+    "start": "nodemon --exec babel-node index.js",
+    "dev":   "npm run all --parallel dev:*",
+    "dev:server": "nodemon --watch build --exec node build/bundle.js"
   },
   "keywords": [],
   "author": "Kohwo Orien <kowo4real@yahoo.co.uk>",
