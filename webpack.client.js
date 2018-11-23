@@ -5,7 +5,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 module.exports = {
   mode: webConfig.environment,
 
-  entry: [".src/app.js", ".src/assets/scss/styles.scss"],
+  entry: ["./src/client.js", "./src/assets/scss/style.scss"],
 
   output: {
     filename: "client_bundle.js",

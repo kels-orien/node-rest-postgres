@@ -1,4 +1,4 @@
-const path = requirw("path");
+const path = require("path");
 const webConfig = require("./webConfig");
 const webpackNodeExternals = require("webpack-node-externals");
 
@@ -12,7 +12,7 @@ module.exports = {
 
   // Tell webpack the root file of our
   // server application
-  entry: "./server.js",
+  entry: ["babel-polyfill", "./index.js"],
 
   // Tell webpack where to put the output file
   // that is generated
