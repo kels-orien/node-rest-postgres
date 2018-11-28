@@ -11,12 +11,12 @@ import { AuthenticationError } from "apollo-server";
 import "dotenv/config";
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3000;
 app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use("/", express.static("build/public"));
 const getUser = async req => {
   const token = req.headers["x-token"];
 
@@ -55,6 +55,6 @@ server.installSubscriptionHandlers(httpServer);
 
 sequelize.sync().then(async () => {
   httpServer.listen({ port: PORT }, () =>
-    console.log(`🚀 Server ready at http://localhost:8080${server.graphqlPath}`)
+    console.log(`🚀 Server ready at http://localhost:3000${server.graphqlPath}`)
   );
 });
