@@ -94,7 +94,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\nvar _http = __webpack_require__(/*! http */ \"http\");\n\nvar _http2 = _interopRequireDefault(_http);\n\nvar _cors = __webpack_require__(/*! cors */ \"cors\");\n\nvar _cors2 = _interopRequireDefault(_cors);\n\nvar _express = __webpack_require__(/*! express */ \"express\");\n\nvar _express2 = _interopRequireDefault(_express);\n\nvar _bodyParser = __webpack_require__(/*! body-parser */ \"body-parser\");\n\nvar _bodyParser2 = _interopRequireDefault(_bodyParser);\n\nvar _apolloServerExpress = __webpack_require__(/*! apollo-server-express */ \"apollo-server-express\");\n\nvar _resolvers = __webpack_require__(/*! ./resolvers */ \"./resolvers/index.js\");\n\nvar _resolvers2 = _interopRequireDefault(_resolvers);\n\nvar _schema = __webpack_require__(/*! ./schema */ \"./schema/index.js\");\n\nvar _schema2 = _interopRequireDefault(_schema);\n\nvar _jsonwebtoken = __webpack_require__(/*! jsonwebtoken */ \"jsonwebtoken\");\n\nvar _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);\n\nvar _models = __webpack_require__(/*! ./models */ \"./models/index.js\");\n\nvar _models2 = _interopRequireDefault(_models);\n\nvar _apolloServer = __webpack_require__(/*! apollo-server */ \"apollo-server\");\n\n__webpack_require__(/*! dotenv/config */ \"dotenv/config\");\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step(\"next\", value); }, function (err) { step(\"throw\", err); }); } } return step(\"next\"); }); }; }\n\nvar app = (0, _express2.default)();\nvar PORT = process.env.PORT || 3000;\napp.use((0, _cors2.default)());\n\napp.use(_bodyParser2.default.json());\napp.use(_bodyParser2.default.urlencoded({ extended: true }));\napp.use(\"/\", _express2.default.static(\"build/public\"));\nvar getUser = function () {\n  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req) {\n    var token;\n    return regeneratorRuntime.wrap(function _callee$(_context) {\n      while (1) {\n        switch (_context.prev = _context.next) {\n          case 0:\n            token = req.headers[\"x-token\"];\n\n            if (!token) {\n              _context.next = 11;\n              break;\n            }\n\n            _context.prev = 2;\n            _context.next = 5;\n            return _jsonwebtoken2.default.verify(token, process.env.SECRET);\n\n          case 5:\n            return _context.abrupt(\"return\", _context.sent);\n\n          case 8:\n            _context.prev = 8;\n            _context.t0 = _context[\"catch\"](2);\n            throw new _apolloServer.AuthenticationError(\"Your session expired. Sign in again.\");\n\n          case 11:\n          case \"end\":\n            return _context.stop();\n        }\n      }\n    }, _callee, undefined, [[2, 8]]);\n  }));\n\n  return function getUser(_x) {\n    return _ref.apply(this, arguments);\n  };\n}();\n\nvar server = new _apolloServerExpress.ApolloServer({\n  typeDefs: _schema2.default,\n  resolvers: _resolvers2.default,\n  context: function () {\n    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(_ref2) {\n      var req = _ref2.req,\n          connection = _ref2.connection;\n      var currentUser;\n      return regeneratorRuntime.wrap(function _callee2$(_context2) {\n        while (1) {\n          switch (_context2.prev = _context2.next) {\n            case 0:\n              if (!connection) {\n                _context2.next = 2;\n                break;\n              }\n\n              return _context2.abrupt(\"return\", {\n                models: _models2.default\n              });\n\n            case 2:\n              if (!req) {\n                _context2.next = 7;\n                break;\n              }\n\n              _context2.next = 5;\n              return getUser(req);\n\n            case 5:\n              currentUser = _context2.sent;\n              return _context2.abrupt(\"return\", {\n                models: _models2.default,\n                currentUser: currentUser,\n                secret: process.env.SECRET\n              });\n\n            case 7:\n            case \"end\":\n              return _context2.stop();\n          }\n        }\n      }, _callee2, undefined);\n    }));\n\n    function context(_x2) {\n      return _ref3.apply(this, arguments);\n    }\n\n    return context;\n  }()\n});\nserver.applyMiddleware({ app: app, path: \"/graphql\" });\nvar httpServer = _http2.default.createServer(app);\nserver.installSubscriptionHandlers(httpServer);\n\n_models.sequelize.sync().then(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {\n  return regeneratorRuntime.wrap(function _callee3$(_context3) {\n    while (1) {\n      switch (_context3.prev = _context3.next) {\n        case 0:\n          httpServer.listen({ port: PORT }, function () {\n            return console.log(\"\\uD83D\\uDE80 Server ready at http://localhost:3000\" + server.graphqlPath);\n          });\n\n        case 1:\n        case \"end\":\n          return _context3.stop();\n      }\n    }\n  }, _callee3, undefined);\n})));\n\n//# sourceURL=webpack:///./index.js?");
+eval("\n\nvar _http = __webpack_require__(/*! http */ \"http\");\n\nvar _http2 = _interopRequireDefault(_http);\n\nvar _cors = __webpack_require__(/*! cors */ \"cors\");\n\nvar _cors2 = _interopRequireDefault(_cors);\n\nvar _express = __webpack_require__(/*! express */ \"express\");\n\nvar _express2 = _interopRequireDefault(_express);\n\nvar _bodyParser = __webpack_require__(/*! body-parser */ \"body-parser\");\n\nvar _bodyParser2 = _interopRequireDefault(_bodyParser);\n\nvar _apolloServerExpress = __webpack_require__(/*! apollo-server-express */ \"apollo-server-express\");\n\nvar _resolvers = __webpack_require__(/*! ./resolvers */ \"./resolvers/index.js\");\n\nvar _resolvers2 = _interopRequireDefault(_resolvers);\n\nvar _schema = __webpack_require__(/*! ./schema */ \"./schema/index.js\");\n\nvar _schema2 = _interopRequireDefault(_schema);\n\nvar _cookieParser = __webpack_require__(/*! cookie-parser */ \"cookie-parser\");\n\nvar _cookieParser2 = _interopRequireDefault(_cookieParser);\n\nvar _webConfig = __webpack_require__(/*! ./webConfig */ \"./webConfig.json\");\n\nvar _webConfig2 = _interopRequireDefault(_webConfig);\n\nvar _reactRouter = __webpack_require__(/*! react-router */ \"react-router\");\n\nvar _apolloCacheInmemory = __webpack_require__(/*! apollo-cache-inmemory */ \"apollo-cache-inmemory\");\n\nvar _react = __webpack_require__(/*! react */ \"react\");\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _server = __webpack_require__(/*! react-dom/server */ \"react-dom/server\");\n\nvar _server2 = _interopRequireDefault(_server);\n\nvar _reactApollo = __webpack_require__(/*! react-apollo */ \"react-apollo\");\n\nvar _apolloClient = __webpack_require__(/*! apollo-client */ \"apollo-client\");\n\nvar _apolloLinkHttp = __webpack_require__(/*! apollo-link-http */ \"apollo-link-http\");\n\nvar _graphqlTools = __webpack_require__(/*! graphql-tools */ \"graphql-tools\");\n\nvar _reactHelmet = __webpack_require__(/*! react-helmet */ \"react-helmet\");\n\nvar _jsonwebtoken = __webpack_require__(/*! jsonwebtoken */ \"jsonwebtoken\");\n\nvar _jsonwebtoken2 = _interopRequireDefault(_jsonwebtoken);\n\nvar _models = __webpack_require__(/*! ./models */ \"./models/index.js\");\n\nvar _models2 = _interopRequireDefault(_models);\n\nvar _apolloServer = __webpack_require__(/*! apollo-server */ \"apollo-server\");\n\n__webpack_require__(/*! dotenv/config */ \"dotenv/config\");\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step(\"next\", value); }, function (err) { step(\"throw\", err); }); } } return step(\"next\"); }); }; }\n\nvar app = (0, _express2.default)();\nvar PORT = process.env.PORT || 3000;\napp.use((0, _cors2.default)({\n  origin: \"\" + _webConfig2.default.siteURL,\n  credentials: true\n}));\n\napp.use(_bodyParser2.default.json());\napp.use(_bodyParser2.default.urlencoded({ extended: true }));\napp.use('/graphiql', (0, _apolloServerExpress.graphiqlExpress)({\n  endpointURL: '/graphql'\n}));\napp.use(\"/\", _express2.default.static(\"build/public\"));\n\n// JWT Middelware \napp.use(function () {\n  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res, next) {\n    var token, currentUser;\n    return regeneratorRuntime.wrap(function _callee$(_context) {\n      while (1) {\n        switch (_context.prev = _context.next) {\n          case 0:\n            token = req.cookies.token ? req.cookies.token : null;\n\n            if (!(token !== null)) {\n              _context.next = 12;\n              break;\n            }\n\n            _context.prev = 2;\n            _context.next = 5;\n            return _jsonwebtoken2.default.verify(token, process.env.JWT_SECRET);\n\n          case 5:\n            currentUser = _context.sent;\n\n            req.currentUser = currentUser;\n            _context.next = 12;\n            break;\n\n          case 9:\n            _context.prev = 9;\n            _context.t0 = _context[\"catch\"](2);\n\n            //   console.error(err);\n            res.clearCookie('token');\n\n          case 12:\n            next();\n\n          case 13:\n          case \"end\":\n            return _context.stop();\n        }\n      }\n    }, _callee, undefined, [[2, 9]]);\n  }));\n\n  return function (_x, _x2, _x3) {\n    return _ref.apply(this, arguments);\n  };\n}());\n\nvar schemas = (0, _graphqlTools.makeExecutableSchema)({\n  schema: _schema2.default,\n  resolvers: _resolvers2.default\n});\n\napp.use('/graphiql', (0, _apolloServerExpress.graphiqlExpress)({\n  endpointURL: '/graphql'\n}));\n\n//connect schema with graphql\napp.use('/graphql', _bodyParser2.default.json(), (0, _apolloServerExpress.graphqlExpress)(function (_ref2) {\n  var currentUser = _ref2.currentUser;\n  return {\n    schemas: schemas,\n    context: {\n      models: _models2.default,\n      currentUser: currentUser\n    }\n  };\n}));\n\napp.get(['*/:param', '*'], function (req, res) {\n\n  var URL_Param = req.params.param ? req.params.param : null;\n\n  var client = new _apolloClient.ApolloClient({\n    ssrMode: true,\n    // Remember that this is the interface the SSR server will use to connect to the\n    // API server, so we need to ensure it isn't firewalled, etc\n    link: (0, _apolloLinkHttp.createHttpLink)({\n      uri: _webConfig2.default.siteURL + \"/graphql\",\n      credentials: 'same-origin',\n      headers: {\n        cookie: req.header('Cookie')\n      }\n    }),\n    cache: new _apolloCacheInmemory.InMemoryCache()\n  });\n\n  var context = {\n    URL_Param: URL_Param\n  };\n\n  // The client-side App will instead use <BrowserRouter>\n  var App = _react2.default.createElement(\n    _reactApollo.ApolloProvider,\n    { client: client },\n    _react2.default.createElement(\n      _reactRouter.StaticRouter,\n      { location: req.url, context: context },\n      _react2.default.createElement(AppComponent, null)\n    )\n  );\n\n  // Handle queries etc.. before sending raw html\n  (0, _reactApollo.getDataFromTree)(App).then(function () {\n\n    var content = _server2.default.renderToString(App);\n    var helmet = _reactHelmet.Helmet.renderStatic();\n\n    var initialState = client.extract();\n    var html = _react2.default.createElement(HTML, { content: content, state: initialState, helmet: helmet });\n\n    res.status(200);\n    res.send(\"<!doctype html>\\n\" + _server2.default.renderToStaticMarkup(html));\n    res.end();\n  });\n});\n\n_models.sequelize.sync().then(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {\n  return regeneratorRuntime.wrap(function _callee2$(_context2) {\n    while (1) {\n      switch (_context2.prev = _context2.next) {\n        case 0:\n          httpServer.listen({ port: PORT }, function () {\n            return console.log(\"\\uD83D\\uDE80 Server ready at http://localhost:3000\" + server.graphqlPath);\n          });\n\n        case 1:\n        case \"end\":\n          return _context2.stop();\n      }\n    }\n  }, _callee2, undefined);\n})));\n\n//# sourceURL=webpack:///./index.js?");
 
 /***/ }),
 
@@ -158,6 +158,17 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 
 /***/ }),
 
+/***/ "./webConfig.json":
+/*!************************!*\
+  !*** ./webConfig.json ***!
+  \************************/
+/*! exports provided: siteURL, environment, default */
+/***/ (function(module) {
+
+eval("module.exports = {\"siteURL\":\"http://localhost:8080\",\"environment\":\"development\"};\n\n//# sourceURL=webpack:///./webConfig.json?");
+
+/***/ }),
+
 /***/ 0:
 /*!***************************************!*\
   !*** multi babel-polyfill ./index.js ***!
@@ -166,6 +177,39 @@ eval("\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n
 /***/ (function(module, exports, __webpack_require__) {
 
 eval("__webpack_require__(/*! babel-polyfill */\"babel-polyfill\");\nmodule.exports = __webpack_require__(/*! ./index.js */\"./index.js\");\n\n\n//# sourceURL=webpack:///multi_babel-polyfill_./index.js?");
+
+/***/ }),
+
+/***/ "apollo-cache-inmemory":
+/*!****************************************!*\
+  !*** external "apollo-cache-inmemory" ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"apollo-cache-inmemory\");\n\n//# sourceURL=webpack:///external_%22apollo-cache-inmemory%22?");
+
+/***/ }),
+
+/***/ "apollo-client":
+/*!********************************!*\
+  !*** external "apollo-client" ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"apollo-client\");\n\n//# sourceURL=webpack:///external_%22apollo-client%22?");
+
+/***/ }),
+
+/***/ "apollo-link-http":
+/*!***********************************!*\
+  !*** external "apollo-link-http" ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"apollo-link-http\");\n\n//# sourceURL=webpack:///external_%22apollo-link-http%22?");
 
 /***/ }),
 
@@ -224,6 +268,17 @@ eval("module.exports = require(\"body-parser\");\n\n//# sourceURL=webpack:///ext
 
 /***/ }),
 
+/***/ "cookie-parser":
+/*!********************************!*\
+  !*** external "cookie-parser" ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"cookie-parser\");\n\n//# sourceURL=webpack:///external_%22cookie-parser%22?");
+
+/***/ }),
+
 /***/ "cors":
 /*!***********************!*\
   !*** external "cors" ***!
@@ -257,6 +312,17 @@ eval("module.exports = require(\"express\");\n\n//# sourceURL=webpack:///externa
 
 /***/ }),
 
+/***/ "graphql-tools":
+/*!********************************!*\
+  !*** external "graphql-tools" ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"graphql-tools\");\n\n//# sourceURL=webpack:///external_%22graphql-tools%22?");
+
+/***/ }),
+
 /***/ "http":
 /*!***********************!*\
   !*** external "http" ***!
@@ -276,6 +342,61 @@ eval("module.exports = require(\"http\");\n\n//# sourceURL=webpack:///external_%
 /***/ (function(module, exports) {
 
 eval("module.exports = require(\"jsonwebtoken\");\n\n//# sourceURL=webpack:///external_%22jsonwebtoken%22?");
+
+/***/ }),
+
+/***/ "react":
+/*!************************!*\
+  !*** external "react" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"react\");\n\n//# sourceURL=webpack:///external_%22react%22?");
+
+/***/ }),
+
+/***/ "react-apollo":
+/*!*******************************!*\
+  !*** external "react-apollo" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"react-apollo\");\n\n//# sourceURL=webpack:///external_%22react-apollo%22?");
+
+/***/ }),
+
+/***/ "react-dom/server":
+/*!***********************************!*\
+  !*** external "react-dom/server" ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"react-dom/server\");\n\n//# sourceURL=webpack:///external_%22react-dom/server%22?");
+
+/***/ }),
+
+/***/ "react-helmet":
+/*!*******************************!*\
+  !*** external "react-helmet" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"react-helmet\");\n\n//# sourceURL=webpack:///external_%22react-helmet%22?");
+
+/***/ }),
+
+/***/ "react-router":
+/*!*******************************!*\
+  !*** external "react-router" ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("module.exports = require(\"react-router\");\n\n//# sourceURL=webpack:///external_%22react-router%22?");
 
 /***/ }),
 
